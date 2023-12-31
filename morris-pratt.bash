@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Функция для построения префикс-функции
+
 function prefix_function() {
     local pattern=$1
     local m=${#pattern}
@@ -24,7 +24,7 @@ function prefix_function() {
     echo "${pi[@]}"
 }
 
-# Функция для поиска подстроки
+
 function kmp_search() {
     local text=$1
     local pattern=$2
@@ -49,7 +49,7 @@ function kmp_search() {
     done
 }
 
-# Пример использования
+
 text=$1
 pattern=$2
 echo "Строка: $text"
