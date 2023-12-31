@@ -1,56 +1,57 @@
 #!/bin/bash
 
-
-function prefix_function {
+# Функция для построения префикс-функции
+function prefix_function() {
     local pattern=$1
     local m=${#pattern}
-    local pi=(0)
+    local pi=()
 
-    for ((i=1; i<m; i++)); do
-        j=${pi[i-1]}
+    pi[0]=0
+    k=0
 
-        while ((j>0 && pattern[i]!=pattern[j])); do
-            j=${pi[j-1]}
+    for q in $(seq 1 $((m-1))); do
+        while [[ $k -gt 0 && ${pattern:$k:1} != ${pattern:$q:1} ]]; do
+            k=${pi[$k-1]}
         done
 
-        if ((pattern[i]==pattern[j])); then
-            pi[i]=$((j+1))
-        else
-            pi[i]=0
+        if [[ ${pattern:$k:1} == ${pattern:$q:1} ]]; then
+            ((k++))
         fi
+
+        pi[$q]=$k
     done
 
     echo "${pi[@]}"
 }
 
-
-function morris_pratt {
+# Функция для поиска подстроки
+function kmp_search() {
     local text=$1
     local pattern=$2
     local n=${#text}
     local m=${#pattern}
     local pi=($(prefix_function $pattern))
-    local j=0
+    local q=0
 
-    for ((i=0; i<n; i++)); do
-        while ((j>0 && text[i]!=pattern[j])); do
-            j=${pi[j-1]}
+    for i in $(seq 0 $((n-1))); do
+        while [[ $q -gt 0 && ${pattern:$q:1} != ${text:$i:1} ]]; do
+            q=${pi[$q-1]}
         done
 
-        if ((text[i]==pattern[j])); then
-            ((j++))
+        if [[ ${pattern:$q:1} == ${text:$i:1} ]]; then
+            ((q++))
         fi
 
-        if ((j==m)); then
+        if [[ $q -eq $m ]]; then
             echo "Подстрока найдена в позиции $((i-m+1))"
-            j=${pi[j-1]}
+            q=${pi[$q-1]}
         fi
     done
 }
 
-
+# Пример использования
 text=$1
 pattern=$2
 echo "Строка: $text"
 echo "Искомая последовательность: $pattern"
-morris_pratt "$text" "$pattern"
+kmp_search $text $pattern
