@@ -51,4 +51,6 @@ function morris_pratt {
 
 text=$1
 pattern=$2
+echo "Строка: $text"
+echo "Искомая последовательность: $pattern"
 morris_pratt "$text" "$pattern"
